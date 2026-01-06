@@ -519,6 +519,7 @@ public:
 #ifdef PROP_BOTTOM
 
 #define ONCE_PER_BLASTER_EFFECT(X)    \
+  X(stun)                            \
   X(blast)                            \
   X(reload)                           \
   X(empty)                            \
@@ -625,6 +626,7 @@ public:
   }
   void SB_Effect2(EffectType effect, EffectLocation location) override {
     switch (effect) {
+	  case EFFECT_STUN:     this->scr_.Play(&SCR_stun);    break;
       case EFFECT_FIRE:     this->scr_.Play(&SCR_blast);   break;
       case EFFECT_RELOAD:   this->scr_.Play(&SCR_reload);  break;
       case EFFECT_EMPTY:    this->scr_.Play(&SCR_empty);   break;
