@@ -735,7 +735,7 @@ using SPIDisplay_DFRobot096 = SPIDisplay77XX<
   LAYERS,
   CONFIG,
   // HELPER
-  DisplayConfigHelper<LAYERS, CONFIG, SizeT<128, 160>, SA, ST7735>,
+  DisplayConfigHelper<LAYERS, CONFIG, SizeT<80, 160>, SA, ST7735>,
   // InitSequence
   ConcatByteArrays<ST7735::RCMD, typename CONFIG::template rotation_cmd<ST77XXBGR> >,
   // OnSequence
