@@ -25,15 +25,23 @@
 |  Add the slashes to any that you are not using.                   |
 \*-----------------------------------------------------------------*/
 
-// #define CONFIG_FILE "config/YOUR_CONFIG_FILE_NAME_HERE.h"
-
-// #define CONFIG_FILE "config/default_proffieboard_config.h"
-// #define CONFIG_FILE "config/proffieboard_v1_test_bench_config.h"
-// #define CONFIG_FILE "config/proffieboard_v2_testing_config.h"
-// #define CONFIG_FILE "config/td_proffieboard_config.h"
-// #define CONFIG_FILE "config/proffieboard_v1_graflex.h"
-// #define CONFIG_FILE "config/teensy_audio_shield_micom.h"
-// #define CONFIG_FILE "config/proffieboard_v2_ob4.h"
+//#define CONFIG_FILE "config/89Sabers_CK_v2.h"
+//#define CONFIG_FILE "config/Graflex_v2.h"
+//#define CONFIG_FILE "config/Scavenger.h"
+//#define CONFIG_FILE "config/89Sabers_Kylo.h"
+//#define CONFIG_FILE "config/ThermalDetonator.h"
+//#define CONFIG_FILE "config/NN14_v2.h"
+//#define CONFIG_FILE "config/NN14_display.h"
+//#define CONFIG_FILE "config/89sabers_Graflex.h"
+//#define CONFIG_FILE "config/mpp.h"
+//#define CONFIG_FILE "config/Skoll.h"
+//#define CONFIG_FILE "config/owk4.h"
+//#define CONFIG_FILE "config/Siberia.h"
+//#define CONFIG_FILE "config/Sol.h"
+//#define CONFIG_FILE "config/IB94.h"
+//#define CONFIG_FILE "config/glados.h"
+//#define CONFIG_FILE "config/Tricorder_MKVII.h"
+#define CONFIG_FILE "config/E11_oled.h"
 
 #ifndef CONFIG_FILE
 #error Please set CONFIG_FILE as shown above.
