@@ -779,4 +779,55 @@ using SPIDisplay_AdaFruit4311 = SPIDisplay77XX<
   >;
 
 
-#endif
+template<int LAYERS,
+	 class CONFIG = DisplayConfig<1, InsetT<0,0,16,16>>,
+	 class SA = StandardDisplayAdapter<>>
+using SPIDisplay_GreatBobot085 = SPIDisplay77XX<
+  LAYERS,
+  CONFIG,
+  // HELPER
+  DisplayConfigHelper<LAYERS, CONFIG, SizeT<128, 160>, SA, ST7735>,
+  // InitSequence
+  ConcatByteArrays<ST7735::RCMD, typename CONFIG::template rotation_cmd<ST7735> >,
+  // OnSequence
+  ST7735::ONCMD,
+  // Offsequence
+  ST7735::OFFCMD
+  >;
+
+
+template<int LAYERS,
+	 class CONFIG = DisplayConfig<1, InsetT<0,0,16,16>>,
+	 class SA = StandardDisplayAdapter<>>
+using SPIDisplay_ZCTech144 = SPIDisplay77XX<
+  LAYERS,
+  CONFIG,
+  // HELPER
+  DisplayConfigHelper<LAYERS, CONFIG, SizeT<128, 160>, SA, ST7735>,
+  // InitSequence
+  ConcatByteArrays<ST7735::RCMD, typename CONFIG::template rotation_cmd<ST7735> >,
+  // OnSequence
+  ST7735::ONCMD,
+  // Offsequence
+  ST7735::OFFCMD
+  >;
+
+
+template<int LAYERS,
+	 class CONFIG = DisplayConfig<1, InsetT<0,0,40,40>>,
+	 class SA = StandardDisplayAdapter<>>
+using SPIDisplay_AdaFruit4311 = SPIDisplay77XX<
+  LAYERS,
+  CONFIG,
+  // HELPER
+  DisplayConfigHelper<LAYERS, CONFIG, SizeT<240, 320>, SA, ST7789>,
+  // InitSequence
+  ConcatByteArrays<ST7789::GENERIC_ST7789_STARTUP, typename CONFIG::template rotation_cmd<ST7789> > ,
+  // OnSequence
+  ST7789::ONCMD,
+  // Offsequence
+  ST7789::OFFCMD
+  >;
+  
+  
+  #endif
