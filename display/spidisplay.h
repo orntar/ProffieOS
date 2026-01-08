@@ -816,7 +816,7 @@ using SPIDisplay_ZCTech144 = SPIDisplay77XX<
 template<int LAYERS,
 	 class CONFIG = DisplayConfig<1, InsetT<0,0,40,40>>,
 	 class SA = StandardDisplayAdapter<>>
-using SPIDisplay_AdaFruit4311 = SPIDisplay77XX<
+using SPIDisplay_ZCTech130 = SPIDisplay77XX<
   LAYERS,
   CONFIG,
   // HELPER
