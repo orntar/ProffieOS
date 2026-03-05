@@ -1,6 +1,8 @@
 #ifndef SOUND_SOUND_LIBRARY_H
 #define SOUND_SOUND_LIBRARY_H
 
+#ifdef ENABLE_AUDIO
+
 #include "sound_queue.h"
 
 // Sound library
@@ -65,6 +67,19 @@ public:
   void SB_Effect(EffectType effect, EffectLocation location) override {
     if (effect == EFFECT_CHDIR) CheckVersion();
   }
+
+
+  // Legacy call for prop compatibility.
+  void Poll(RefPtr<BufferedWavPlayer>& player) {
+    static bool unlinked = false;
+    if (!unlinked) {
+      unlinked = true;
+      Looper::Unlink();
+      wav_player_.Free();
+    }
+    PollSoundQueue(player);
+  }
+
 private:
   void CheckVersion() {
     int found_version = 0;
@@ -96,7 +111,7 @@ public:
   static bool Play(SoundToPlay p) { return SOUNDQ->Play(p); }
   static void fadeout(float len) { return SOUNDQ->fadeout(len); }
   static bool busy() { return SOUNDQ->busy(); }
-  static void Poll(RefPtr<BufferedWavPlayer>& player) {}
+  static void Poll(RefPtr<BufferedWavPlayer>& player) { SOUNDQ->Poll(player); }
 
   static void init() {
     SOUNDQ->require_version(SoundLibraryVersion);
@@ -177,10 +192,10 @@ public:
 #else
 
 // Use mnum as template where to find sounds.
-#define ADD_SL_SOUND(NAME, BASE)                                        \
-  void Say##NAME() { SOUNDQ->Play(SoundToPlayInSameDirAs(BASE ".wav", &SFX_mnum)); } \
-  /* t for "trampoline" */                                              \
-  struct t##NAME { static void say() { SOUNDQ->Play(SoundToPlayInSameDirAs(BASE ".wav", &SFX_mnum)); } }
+#define ADD_SL_SOUND(NAME, BASE)                                              \
+  void Say##NAME() { SOUNDQ->Play(SoundToPlayInSameDirAs(BASE, &SFX_mnum)); } \
+  /* t for "trampoline" */                                                    \
+  struct t##NAME { static void say() { SOUNDQ->Play(SoundToPlayInSameDirAs(BASE, &SFX_mnum)); } }
 
 #endif
 
@@ -589,4 +604,5 @@ public:
 // Please don't forget to call sound_library_v2->init();
 #define sound_library_v2 (*getPtr<SoundLibraryV2>())
 
+#endif  // ENABLE_AUDIO
 #endif
