@@ -33,19 +33,23 @@ public:
 
 #ifdef ESP32
 
+  static TaskHandle_t fillBufferHandle;
+  static POAtomic<bool> task_created_;
+
   static void FillBufferTask(void* unused) {
     while (true) {
       ProcessAudioStreams();
+      vTaskSuspend(fillBufferHandle);
     }
   }
 
-  static POAtomic<bool> task_created_;
   static void scheduleFillBuffer() {
     if (!task_created_.exchange(true)) {
-      TaskHandle_t xHandle = NULL;
-      xTaskCreatePinnedToCore(FillBufferTask, "SDReadTask", 20000, nullptr, tskIDLE_PRIORITY, &xHandle, 0);
+      // Does this need to move somewhere that is not an interrupt?
+      xTaskCreatePinnedToCore(FillBufferTask, "SDReadTask", 20000, nullptr, tskIDLE_PRIORITY + 10, &fillBufferHandle, 0);
     }
     fill_buffers_pending_.set(true);
+    xTaskResumeFromISR(fillBufferHandle);
   }
 
 #else
@@ -71,15 +75,15 @@ public:
 
   static void LockSD(bool locked) {
 //    scheduleFillBuffer();
-    sd_locked.set(locked);
+    sd_locked += locked ? 1 : -1;
     if (locked) MountSDCard();
   }
 
   static void LockSD_nomount(bool locked) {
-    sd_locked.set(locked);
+    sd_locked += locked ? 1 : -1;
   }
   
-  static bool sd_is_locked() { return sd_locked.get(); }
+  static bool sd_is_locked() { return sd_locked.get() > 0; }
 
   static void CloseAllOpenFiles() {
     for (AudioStreamWork *d = data_streams; d; d=d->next_)
@@ -136,17 +140,18 @@ private:
     fill_buffers_pending_.set(false);
   }
 
-  static POAtomic<bool> sd_locked;
+  static POAtomic<uint32_t> sd_locked;
   static POAtomic<bool> fill_buffers_pending_;
   AudioStreamWork* next_;
 };
 
-POAtomic<bool> AudioStreamWork::sd_locked (false);
+POAtomic<uint32_t> AudioStreamWork::sd_locked (false);
 POAtomic<bool> AudioStreamWork::fill_buffers_pending_(false);
 #define LOCK_SD(X) AudioStreamWork::LockSD(X)
 
 #ifdef ESP32
 POAtomic<bool> AudioStreamWork::task_created_ (false);
+TaskHandle_t AudioStreamWork::fillBufferHandle = nullptr;
 #endif
 
 #endif
